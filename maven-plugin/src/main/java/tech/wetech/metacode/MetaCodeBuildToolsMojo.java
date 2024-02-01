@@ -64,10 +64,14 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
     ConfigGenerator generator = new ConfigGenerator();
     generator.setLog(getLog());
     String path = compilePath.getFirst();
-    String reflectionConfigJson = generator.generateReflectionConfig(path, graalVMReflectionPattern);
-    String resourcesConfigJson = generator.generateResourcesConfig(graalVMResourcesPattern);
-    output(reflectionConfigJson, Path.of(path, graalVMReflectionFileName).toFile());
-    output(resourcesConfigJson, Path.of(path, graalVMResourcesFileName).toFile());
+    if (graalVMReflectionPattern.length > 0) {
+      String reflectionConfigJson = generator.generateReflectionConfig(path, graalVMReflectionPattern);
+      output(reflectionConfigJson, Path.of(path, graalVMReflectionFileName).toFile());
+    }
+    if (graalVMResourcesPattern.length > 0) {
+      String resourcesConfigJson = generator.generateResourcesConfig(graalVMResourcesPattern);
+      output(resourcesConfigJson, Path.of(path, graalVMResourcesFileName).toFile());
+    }
   }
 
   private void printParametersIfDebugEnabled() {
