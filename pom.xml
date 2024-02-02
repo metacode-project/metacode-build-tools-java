@@ -6,23 +6,13 @@
 
   <groupId>tech.wetech.metacode</groupId>
   <artifactId>metacode-build-tools-parent</artifactId>
-  <version>${revision}</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <properties>
+    <maven.deploy.skip>true</maven.deploy.skip>
+  </properties>
   <modules>
     <module>maven-plugin</module>
     <module>integration-tests</module>
   </modules>
-  <properties>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <revision>1.0.0</revision>
-  </properties>
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub MetaCode Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/metacode-project/metacode-maven-packages</url>
-    </repository>
-  </distributionManagement>
 </project>
