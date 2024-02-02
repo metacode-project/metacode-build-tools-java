@@ -55,6 +55,7 @@ public class ConfigGenerator {
         .replaceFirst(".", "");
       for (String pattern : patterns) {
         if (antPathMatcher.match(pattern, className)) {
+          log.debug("Found reflection class file: " + file);
           classNames.add(className);
         }
       }
@@ -89,7 +90,6 @@ public class ConfigGenerator {
     assert files != null;
     for (File file : files) {
       if (file.isFile() && file.getName().endsWith(".class")) {
-        log.debug("Found reflection class file: " + file);
         classFiles.add(file);
       } else if (file.isDirectory()) {
         listFiles(file, classFiles);

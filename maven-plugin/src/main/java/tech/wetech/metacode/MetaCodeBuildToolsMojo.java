@@ -84,6 +84,7 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
 
   private void output(String content, File file) {
     try {
+      getLog().debug("Out File Content:" + content);
       getLog().debug("Output File:" + file);
       file.createNewFile();
       try (OutputStream os = new FileOutputStream(file)) {
