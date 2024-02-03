@@ -26,7 +26,7 @@ public class ConfigGenerator {
    * @param patterns regex paths
    * @return json string
    */
-  public String generateReflectionConfig(String compilePath, String... patterns) {
+  public String generateReflectionConfig(String compilePath, String[] patterns, String[] excludes) {
     List<File> classsFileList = getClasssFileList(compilePath);
     AntPathMatcher antPathMatcher = new AntPathMatcher();
 
@@ -44,6 +44,17 @@ public class ConfigGenerator {
         }
       }
     }
+
+    for (String excludePattern : excludes) {
+      classNames.removeIf(className -> {
+        boolean matched = antPathMatcher.match(excludePattern, className);
+        if (matched) {
+          log.debug("Exclude reflection class: " + className);
+        }
+        return matched;
+      });
+    }
+
     StringBuilder sb = new StringBuilder("[");
     for (String className : classNames) {
       sb.append(String.format("""

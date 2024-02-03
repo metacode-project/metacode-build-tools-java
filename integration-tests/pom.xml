@@ -12,7 +12,7 @@
       <plugin>
         <groupId>tech.wetech.metacode</groupId>
         <artifactId>metacode-maven-plugin</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -22,11 +22,14 @@
           </execution>
         </executions>
         <configuration>
-          <graalVMReflectionPattern>
+          <graalVMReflectionIncludes>
             tech.wetech.metacode.dto.*,
             tech.wetech.metacode.model.*,
             tech.wetech.metacode.*
-          </graalVMReflectionPattern>
+          </graalVMReflectionIncludes>
+          <graalVMReflectionExcludes>
+            tech.wetech.metacode.model.Q*
+          </graalVMReflectionExcludes>
         </configuration>
       </plugin>
     </plugins>

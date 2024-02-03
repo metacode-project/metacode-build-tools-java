@@ -26,7 +26,9 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
   /**
    * Use Ant-style path match reflection class
    */
-  private String[] graalVMReflectionPattern;
+  private String[] graalVMReflectionIncludes;
+
+  private String[] graalVMReflectionExcludes;
 
   /**
    * Reflection file name to generate, default value is reflection-config.json
@@ -37,9 +39,14 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
   @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
   private List<String> compilePath;
 
-  @Parameter(property = "graalVMReflectionPattern")
-  public void setGraalVMReflectionPattern(String[] graalVMReflectionPattern) {
-    this.graalVMReflectionPattern = replaceSpecialCharacter(graalVMReflectionPattern);
+  @Parameter(property = "graalVMReflectionIncludes")
+  public void setGraalVMReflectionIncludes(String[] graalVMReflectionIncludes) {
+    this.graalVMReflectionIncludes = replaceSpecialCharacter(graalVMReflectionIncludes);
+  }
+
+  @Parameter(property = "graalVMReflectionExcludes")
+  public void setGraalVMReflectionExcludes(String[] graalVMReflectionExcludes) {
+    this.graalVMReflectionExcludes = replaceSpecialCharacter(graalVMReflectionExcludes);
   }
 
   @Override
@@ -48,14 +55,15 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
     ConfigGenerator generator = new ConfigGenerator();
     generator.setLog(getLog());
     String path = compilePath.getFirst();
-    if (graalVMReflectionPattern.length > 0) {
-      String reflectionConfigJson = generator.generateReflectionConfig(path, graalVMReflectionPattern);
+    if (graalVMReflectionIncludes.length > 0) {
+      String reflectionConfigJson = generator.generateReflectionConfig(path, graalVMReflectionIncludes, graalVMReflectionExcludes);
       output(reflectionConfigJson, Path.of(path, graalVMReflectionFileName).toFile());
     }
   }
 
   private void printParametersIfDebugEnabled() {
-    getLog().debug("graalVMReflectionPattern=" + Arrays.toString(graalVMReflectionPattern));
+    getLog().debug("graalVMReflectionIncludes=" + Arrays.toString(graalVMReflectionIncludes));
+    getLog().debug("graalVMReflectionExcludes=" + Arrays.toString(graalVMReflectionExcludes));
     getLog().debug("graalVMReflectionFileName=" + graalVMReflectionFileName);
     getLog().debug("compilePath=" + compilePath);
   }
