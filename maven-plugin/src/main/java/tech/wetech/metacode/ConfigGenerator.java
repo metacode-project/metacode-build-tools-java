@@ -22,24 +22,6 @@ public class ConfigGenerator {
   }
 
   /**
-   * generate resource-config json with graalVM
-   * @param patterns Ant-Style paths
-   * @return json string
-   */
-  public String generateResourcesConfig(String... patterns) {
-    StringBuilder sb = new StringBuilder("[");
-    for (String pattern : patterns) {
-      sb.append(String.format("""
-        {
-          "pattern": "%s"
-        },""", pattern));
-    }
-    sb.deleteCharAt(sb.length() - 1);
-    sb.append("]");
-    return sb.toString();
-  }
-
-  /**
    * generate reflection-config json with graalVM
    * @param patterns regex paths
    * @return json string
@@ -50,12 +32,14 @@ public class ConfigGenerator {
 
     Set<String> classNames = new HashSet<>();
     for (File file : classsFileList) {
+      log.debug("Parsing file: " + file);
       String className = file.getPath().replace(compilePath, "")
-        .replace("\\", ".").replaceAll(".class", "")
+        .replaceAll("[/\\\\]", ".").replaceAll(".class", "")
         .replaceFirst(".", "");
+      log.debug("Extract file class name: " + className);
       for (String pattern : patterns) {
         if (antPathMatcher.match(pattern, className)) {
-          log.debug("Found reflection class file: " + file);
+          log.debug("Found reflection class: " + file);
           classNames.add(className);
         }
       }

@@ -29,21 +29,10 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
   private String[] graalVMReflectionPattern;
 
   /**
-   * Use Regex match resources
-   */
-  private String[] graalVMResourcesPattern;
-
-  /**
    * Reflection file name to generate, default value is reflection-config.json
    */
   @Parameter(property = "graalVMReflectionFileName", defaultValue = "reflection-config.json")
   private String graalVMReflectionFileName;
-
-  /**
-   * Resources file name to generate, default value is resources-config.json
-   */
-  @Parameter(property = "graalVMResourcesFileName", defaultValue = "resources-config.json")
-  private String graalVMResourcesFileName;
 
   @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
   private List<String> compilePath;
@@ -51,11 +40,6 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
   @Parameter(property = "graalVMReflectionPattern")
   public void setGraalVMReflectionPattern(String[] graalVMReflectionPattern) {
     this.graalVMReflectionPattern = replaceSpecialCharacter(graalVMReflectionPattern);
-  }
-
-  @Parameter(property = "graalVMResourcesPattern")
-  public void setGraalVMResourcesPattern(String[] graalVMResourcesPattern) {
-    this.graalVMResourcesPattern = replaceSpecialCharacter(graalVMResourcesPattern);
   }
 
   @Override
@@ -68,17 +52,11 @@ public class MetaCodeBuildToolsMojo extends AbstractMojo {
       String reflectionConfigJson = generator.generateReflectionConfig(path, graalVMReflectionPattern);
       output(reflectionConfigJson, Path.of(path, graalVMReflectionFileName).toFile());
     }
-    if (graalVMResourcesPattern.length > 0) {
-      String resourcesConfigJson = generator.generateResourcesConfig(graalVMResourcesPattern);
-      output(resourcesConfigJson, Path.of(path, graalVMResourcesFileName).toFile());
-    }
   }
 
   private void printParametersIfDebugEnabled() {
     getLog().debug("graalVMReflectionPattern=" + Arrays.toString(graalVMReflectionPattern));
-    getLog().debug("graalVMResourcesPattern=" + Arrays.toString(graalVMResourcesPattern));
     getLog().debug("graalVMReflectionFileName=" + graalVMReflectionFileName);
-    getLog().debug("graalVMResourcesFileName=" + graalVMResourcesFileName);
     getLog().debug("compilePath=" + compilePath);
   }
 
